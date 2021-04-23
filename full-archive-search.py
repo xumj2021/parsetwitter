@@ -7,7 +7,7 @@ import time
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
 
-bearer_token = "AAAAAAAAAAAAAAAAAAAAAKbgOgEAAAAAa7G3B5pooGVsx15ldgtH0EqKScY%3DYOzrXO63aEai0EfqKC3VjQAwGL08NOy1p9cg4LFwZ8eN39OhBc"
+bearer_token = "xxx"
 
 search_url = "https://api.twitter.com/2/tweets/search/all"
 
