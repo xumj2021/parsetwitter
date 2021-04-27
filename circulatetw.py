@@ -12,16 +12,18 @@ def gettone(file_name):
 	try:
 		tweets = data.iloc[:,2]
 		analyzer = SentimentIntensityAnalyzer()
-		with open("/Users/mengjiexu/Documents/TwitterParsing/results/2013Q1_Tone/%s_Tone.csv"%file_name,'a') as f:
+		with open("/Users/mengjiexu/Documents/TwitterParsing/results/2013Q1_Tone/%s_Tone.csv"%file_name,'w') as f:
 			w = csv.writer(f)
 			for i in range(len(tweets)):
 				vs = analyzer.polarity_scores(tweets[i])
-				baseinfo = data.iloc[[i]].values.tolist()[0]+[vs]
+				baseinfo = data.iloc[[i]].values.tolist()[0]+[vs]+list(vs.values())
+				print(baseinfo)
 				w.writerow(baseinfo)
 	except:
 		print("%s has error"%file_name)
 		with open("/Users/mengjiexu/Documents/TwitterParsing/results/error.txt",'a') as h:
-			h.write(file_name)
+			h.write(file_name+'\n')
+
 
 for path,dir_list,file_list in g:
     for file_name in tqdm(file_list):
