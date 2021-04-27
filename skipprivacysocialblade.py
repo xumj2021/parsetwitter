@@ -13,8 +13,8 @@ f=open("/Users/mengjiexu/Dropbox/Pythoncodes/filteredtwacclist.txt",'r')
 option = webdriver.FirefoxOptions()
 option.add_argument('-headless')
 driver = webdriver.Firefox(executable_path='/Users/mengjiexu/Dropbox/Pythoncodes/Bleier/geckodriver')
-email = 'a.bleier@fs.de'
-pw = 'influencer2020'
+email = 'xxx'
+pw = 'xxx'
 
 def login(email, pw):
     driver.get(
