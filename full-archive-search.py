@@ -3,11 +3,16 @@ import os
 import json
 import csv
 import time
+from tqdm import tqdm
+import nest_asyncio
+nest_asyncio.apply()
 
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
 
-bearer_token = "xxx"
+tickerlist = open("/Users/mengjiexu/Documents/TwitterParsing/code/templist.txt",'r')
+
+bearer_token = "AAAAAAAAAAAAAAAAAAAKbgOgEAAAAAa7G3B5pooGVsx15ldgtH0EqKScY%3DYOzrXO63aEai0EfqKC3VjQAwGL08NOy1p9cg4LFwZ8eN39OhB"
 
 search_url = "https://api.twitter.com/2/tweets/search/all"
 
@@ -22,7 +27,7 @@ def create_headers(bearer_token):
     headers = {"Authorization": "Bearer {}".format(bearer_token)}
     return headers
 
-def connect_to_endpoint(search_url, headers, params):
+def connect_to_endpoint(url, headers, params):
     response = requests.request("GET", search_url, headers=headers,params=params)
     if response.status_code != 200:
         raise Exception(response.status_code, response.text)
@@ -33,19 +38,27 @@ def updatepara(oldpara, next_token):
     return(newpara)
 
 def csvjson(firm, start_time, end_time, json_response):
-    with open("/Users/mengjiexu/Documents/TwitterParsing/%s_2013Q1.csv"%firm,'a') as f:
-        w = csv.writer(f)
-        tweets = json_response['data']
-        for tw in tweets:
-            created_at = tw['created_at']
-            list = [tw['created_at'], tw['id'],tw['text'],tw['public_metrics']['retweet_count'],tw['public_metrics']['reply_count'], tw['public_metrics']['like_count']]
-            w.writerow(list)
-
     meta = json_response['meta']
+    callnum = meta['result_count']
     try:
         next_token = meta['next_token']
     except:
         next_token = False
+    empty = (callnum==0)
+    with open("/Users/mengjiexu/Documents/TwitterParsing/results/meta.csv",'a') as g:
+        now = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+        g.write(",".join([firm, start_time, end_time,now, repr(callnum), str(next_token)])+'\n')
+    
+    if not empty:
+        #with open("/Users/mengjiexu/Documents/TwitterParsing/2013Q1/%s_%s_%s.csv"%(firm, start_time,end_time),'a') as f:
+        with open("/Users/mengjiexu/Documents/TwitterParsing/results/2013Q1/%s_2013Q1.csv"%(firm),'a') as f:
+            w = csv.writer(f)
+            tweets = json_response['data']
+            for tw in tweets:
+                created_at = tw['created_at']
+                list = [tw['created_at'], tw['id'],tw['text'],tw['public_metrics']['retweet_count'],tw['public_metrics']['reply_count'], tw['public_metrics']['like_count']]
+                w.writerow(list)
+    
     return(next_token)
 
 def dealjson(firm, start_time, end_time, json_response):
@@ -62,8 +75,10 @@ def dealjson(firm, start_time, end_time, json_response):
 def mainparse(firm,start_time,end_time):
     headers = create_headers(bearer_token)
     json_response = connect_to_endpoint(search_url, headers, setpara(firm,start_time,end_time))
-    dealjson(firm, start_time, end_time, json_response)
+    dealjson(firm, start_time, end_time, json_response) 
 
     #print(json.dumps(json_response, indent=4, sort_keys=True))
-mainparse('$AAPL','2013-01-01T15:00:00Z','2013-01-01T16:00:00Z')
-
+for ticker in tqdm(tickerlist):
+    print(ticker)
+    time.sleep(1)
+    mainparse('$%s'%ticker.strip(),'2013-01-01T00:00:00Z','2013-04-01T00:00:00Z')
