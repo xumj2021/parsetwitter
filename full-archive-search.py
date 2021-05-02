@@ -12,7 +12,7 @@ nest_asyncio.apply()
 
 tickerlist = open("/Users/mengjiexu/Documents/TwitterParsing/code/templist.txt",'r')
 
-bearer_token = "AAAAAAAAAAAAAAAAAAAKbgOgEAAAAAa7G3B5pooGVsx15ldgtH0EqKScY%3DYOzrXO63aEai0EfqKC3VjQAwGL08NOy1p9cg4LFwZ8eN39OhB"
+bearer_token = "xxx"
 
 search_url = "https://api.twitter.com/2/tweets/search/all"
 
