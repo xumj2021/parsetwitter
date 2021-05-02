@@ -20,11 +20,11 @@ def gettone(file_name):
 		compound_ave = data.iloc[:,10].mean()
 		compound_nonzero = data.iloc[:,10].astype(bool).sum(axis=0)
 		retweet_ave = data.iloc[:,3].mean()
-		retweet_nonzero = data.iloc[:,3].mean()
-		reply_ave = data.iloc[:,3].mean()
-		reply_nonzero = data.iloc[:,3].mean()
-		like_ave = data.iloc[:,3].mean()
-		like_nonzero = data.iloc[:,3].mean()
+		retweet_nonzero = data.iloc[:,3].astype(bool).sum(axis=0)
+		reply_ave = data.iloc[:,4].mean()
+		reply_nonzero = data.iloc[:,4].astype(bool).sum(axis=0)
+		like_ave = data.iloc[:,5].mean()
+		like_nonzero = data.iloc[:,5].astype(bool).sum(axis=0)
 		tweetnum = len(data)
 		firm = file_name.split(".")[0]
 		info  = [firm, pos_ave, pos_nonzero, neg_ave, neg_nonzero, neu_ave, neu_nonzero, 
@@ -35,7 +35,7 @@ def gettone(file_name):
 		pass
 
 	
-with open("/Users/mengjiexu/Documents/TwitterParsing/results/avetone.csv",'a') as f:
+with open("/Users/mengjiexu/Documents/TwitterParsing/results/avetone.csv",'w') as f:
 	w = csv.writer(f)
 	w.writerow(["firm", "pos_ave", "pos_nonzero", "neg_ave", "neg_nonzero", "neu_ave", "neu_nonzero", 
 			"compound_ave", "compound_nonzero", "retweet_ave", "retweet_nonzero", "reply_ave", "reply_nonzero",
